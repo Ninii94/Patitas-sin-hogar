@@ -25,7 +25,8 @@
   },
   "scripts": {
   "start": "node server.js",
-  "build": "react-scripts build"
+       "build": "cd adopcion && npm install && npm run build",
+       "dev": "concurrently \"nodemon server.js\" \"cd adopcion && npm start\""
 },
   "browserslist": {
     "production": [
