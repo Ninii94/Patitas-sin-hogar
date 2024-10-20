@@ -1,0 +1,124 @@
+
+
+.hogar-de-transito {
+  font-family: poppins, Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.participa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.participa h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.contenido-participa {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.imagen-perrito {
+  max-width: 300px;
+  height: auto;
+}
+
+.h1participa {
+  font-size: 1.2rem;
+  max-width: 600px;
+}
+
+.requisitos {
+  position: relative;
+}
+
+.requisitos h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.requisitos ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.requisitos li {
+  margin-bottom: 15px;
+}
+
+.requisitos-especificos {
+  margin-top: 30px;
+}
+
+.imagen-gato {
+  position: absolute;
+  bottom: -50px;
+  right: 0;
+  max-width: 200px;
+  height: auto;
+}
+
+.postulate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #97b1f4;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  margin-top: 40px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.postulate-btn:hover{
+  background: linear-gradient(45deg, #40e0d0, #8a2be2);
+}
+.pata {
+  margin: 0 10px;
+}
+
+
+
+@media (max-width: 768px) {
+  .contenido-participa {
+    flex-direction: column;
+  }
+
+  .imagen-perrito {
+    max-width: 200px;
+  }
+
+  .requisitos h2 {
+    font-size: 1.5rem;
+  }
+
+  .imagen-gato {
+    max-width: 150px;
+    bottom: -30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .participa h1 {
+    font-size: 2rem;
+  }
+
+  .h1participa {
+    font-size: 1rem;
+  }
+
+  .imagen-gato {
+    display: none;
+  }
+}

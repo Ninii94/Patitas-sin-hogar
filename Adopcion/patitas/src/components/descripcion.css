@@ -1,0 +1,128 @@
+.mascota-detalle-pagina {
+  padding: 20px;
+}
+
+.mascota-detalle-contenedor {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.mascota-imagenes-contenedor {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mascota-imagen-principal {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.mascota-info-contenedor {
+  width: 100%;
+}
+
+.mascota-nombre {
+  font-size: 2.5em;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.mascota-codigo {
+  color: #a19c9c;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.mascota-detalles {
+  margin-bottom: 20px;
+}
+
+.mascota-detalles p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.whatsapp {
+  margin-top: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.volver-btn {
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #37d8c8, #af5ffa);
+  color: white;
+  text-decoration: none;
+  border-radius: 28px;
+  font-size: 18px;
+}
+
+.volver-btn:hover {
+  background: linear-gradient(45deg, #27a094, #7e45b1);
+}
+
+@media (min-width: 768px) {
+  .mascota-detalle-contenedor {
+    flex-direction: row;
+    padding: 35px;
+  }
+
+  .mascota-imagenes-contenedor {
+    flex: 0 0 45%;
+    margin-bottom: 0;
+  }
+
+  .mascota-info-contenedor {
+    flex: 1;
+    margin-left: 30px;
+  }
+
+  .mascota-nombre {
+    font-size: 3em;
+    text-align: left;
+  }
+
+  .mascota-codigo {
+    text-align: left;
+  }
+
+  .mascota-detalles p {
+    font-size: 18px;
+  }
+
+  .whatsapp {
+    text-align: left;
+  }
+
+  .volver-btn {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mascota-nombre {
+    font-size: 4em;
+  }
+
+  .mascota-detalles p {
+    font-size: 19px;
+  }
+
+  .volver-btn {
+    font-size: 22px;
+  }
+}

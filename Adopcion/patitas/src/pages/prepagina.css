@@ -1,0 +1,131 @@
+.pre-pagina {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+  background-color: #d6d7dd;
+}
+
+.advertencia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.icono-advertencia {
+  font-size: 3rem;
+  color: #b700ff;
+}
+
+.titulo-requisitos {
+  color: #4a4e69;
+  margin-bottom: 1rem;
+}
+
+.requisitos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.requisitos-columna {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.requisito {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.icono-pata {
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  color: #4a4e69;
+  margin-right: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.imagen-cachorros {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.texto-info {
+  max-width: 800px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.boton-conocelos {
+  background: linear-gradient(45deg, #40e0d0, #8a2be2);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.boton-conocelos:hover {
+  filter: brightness(1.2);
+}
+
+.texto-boton {
+  margin-right: 8px;
+}
+
+.icono-pata-boton {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .pre-pagina {
+    padding: 2rem;
+  }
+
+  .icono-advertencia {
+    font-size: 4rem;
+  }
+
+  .imagen-cachorros {
+    max-height: 400px;
+    width: auto;
+  }
+
+  .texto-info {
+    font-size: 1rem;
+  }
+
+  .boton-conocelos {
+    font-size: 1.5rem;
+    padding: 10px 25px;
+  }
+
+  .icono-pata-boton {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .requisitos-container {
+    flex-direction: column;
+  }
+
+  .imagen-cachorros {
+    order: -1;
+  }
+}
