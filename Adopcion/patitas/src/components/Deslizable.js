@@ -15,7 +15,8 @@ const Deslizable = () => {
   useEffect(() => {
     const fetchMascotasRecientes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/mascotas/recientes');
+        const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const response = await axios.get(`${baseURL}/api/mascotas/recientes`);
         console.log('Datos recibidos:', response.data);
         setMascotas(response.data);
       } catch (error) {

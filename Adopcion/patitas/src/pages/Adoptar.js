@@ -6,6 +6,7 @@ import { FaFilter } from 'react-icons/fa';
 import PatitaLoading from '../components/PatitaLoading';
 import './adoptar.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://patitas-sin-hogar.onrender.com';
 
 const MascotaCard = ({ id, nombre, especie, sexo, imagen_url }) => (
   <Link to={`/mascota/${id}`} className="mascota-card">

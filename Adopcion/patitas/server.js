@@ -12,13 +12,12 @@ require('dotenv').config();
 const app = express();
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'https://patitas-sin-hogar.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'adopcion/build')));
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -29,15 +28,16 @@ const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  database: process.env.DB_DATABASE,
   port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   ssl: {
-    rejectUnauthorized: true
+    rejectUnauthorized: false
   }
 });
+
 
 const testDatabaseConnection = async () => {
   try {
@@ -47,17 +47,21 @@ const testDatabaseConnection = async () => {
   } catch (error) {
     console.error('❌ Error conectando a AWS RDS:', error);
   }
+ 
 };
+
+
 
 // Verificar conexión al iniciar
 testDatabaseConnection();
+
 
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM Usuario_Administrador WHERE nombre_usuario = ?',
+      'SELECT * FROM usuario_administrador WHERE nombre_usuario = ?',
       [username]
     );
 
@@ -92,7 +96,7 @@ app.post('/api/mascotas', async (req, res) => {
 
   try {
     const [result] = await pool.execute(
-      'INSERT INTO Mascotas_Disponibles (nombre, especie, edad, sexo, descripcion, numero_contacto, cod_refugio, imagen_url) VALUES (?, ?, ?, ?, ?, ?, ?, NULLIF(?, ""))',
+      'INSERT INTO mascotas_disponibles (nombre, especie, edad, sexo, descripcion, numero_contacto, cod_refugio, imagen_url) VALUES (?, ?, ?, ?, ?, ?, ?, NULLIF(?, ""))',
       [nombre, especie, edad, sexo, descripcion, numero_contacto, cod_refugio, imagen_url]
     );
     console.log('Resultado de la inserción:', result);
@@ -127,9 +131,9 @@ app.get('/api/mascotas', async (req, res) => {
         md.imagen_url,
         r.nombre AS nombre_refugio
       FROM 
-        Mascotas_Disponibles md
+        mascotas_disponibles md
       LEFT JOIN 
-        Refugios r ON md.cod_refugio = r.cod_refugio
+        refugios r ON md.cod_refugio = r.cod_refugio
     `;
 
     const [rows] = await pool.query(query);
@@ -173,7 +177,7 @@ app.put('/api/mascotas/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      'UPDATE Mascotas_Disponibles SET nombre = ?, especie = ?, edad = ?, sexo = ?, descripcion = ?, numero_contacto = ?, cod_refugio = ?, imagen_url = ? WHERE id = ?',
+      'UPDATE mascotas_disponibles SET nombre = ?, especie = ?, edad = ?, sexo = ?, descripcion = ?, numero_contacto = ?, cod_refugio = ?, imagen_url = ? WHERE id = ?',
       [nombre, especie, edad, sexo, descripcion, numero_contacto, cod_refugio, imagen_url, id]
     );
 
@@ -188,7 +192,7 @@ app.delete('/api/mascotas/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    await pool.execute('DELETE FROM Mascotas_Disponibles WHERE id = ?', [id]);
+    await pool.execute('DELETE FROM mascotas_disponibles WHERE id = ?', [id]);
     res.json({ message: 'Mascota eliminada con éxito' });
   } catch (error) {
     console.error('Error al eliminar mascota:', error);
@@ -197,7 +201,7 @@ app.delete('/api/mascotas/:id', async (req, res) => {
 });
 app.get('/api/refugios/codigos', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT DISTINCT cod_refugio FROM Refugios ORDER BY cod_refugio');
+    const [rows] = await pool.query('SELECT DISTINCT cod_refugio FROM refugios ORDER BY cod_refugio');
     const codigos = rows.map(row => row.cod_refugio);
     res.json(codigos);
   } catch (error) {
@@ -209,7 +213,7 @@ app.get('/api/refugios/codigos', async (req, res) => {
 app.get('/api/mascotas/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const [rows] = await pool.query('SELECT * FROM Mascotas_Disponibles WHERE id = ?', [id]);
+    const [rows] = await pool.query('SELECT * FROM mascotas_disponibles WHERE id = ?', [id]);
     if (rows.length > 0) {
       res.json(rows[0]);
     } else {
@@ -230,72 +234,3 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-
-/*const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const mysql = require('mysql2/promise');
-const cors = require('cors');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/') // Asegúrate de crear esta carpeta
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname))
-  }
-});
-
-const upload = multer({ storage: storage }).array('imagenes', 2);
-
-// Configuración de la base de datos
-const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '0381',
-  database: 'adopcion_mascotas',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-app.use('/uploads', express.static('uploads'));
-// nueva mascota
-app.post('/api/mascotas', upload, async (req, res) => {
-  try {
-    const { Nombre, Especie, Edad, Sexo, Descripcion, CodRefugio } = req.body;
-    const connection = await pool.getConnection();
-    
-    const [result] = await connection.execute(
-      'INSERT INTO Mascotas (Nombre, Especie, Edad, Sexo, Descripcion, CodRefugio) VALUES (?, ?, ?, ?, ?, ?)',
-      [Nombre, Especie, Edad, Sexo, Descripcion, CodRefugio]
-    );
-
-    if (req.files && req.files.length > 0) {
-      for (let file of req.files) {
-        await connection.execute(
-          'INSERT INTO Fotos (CodMascota, RutaFoto) VALUES (?, ?)',
-          [result.insertId, file.path]
-        );
-      }
-    }
-
-    connection.release();
-    res.status(201).json({ message: 'Mascota lista para adopcion', id: result.insertId });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al subir la mascota' });
-  }
-});
-// Otras rutas (GET, PUT, DELETE) aquí...
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
-
-
-
-*/
