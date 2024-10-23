@@ -6,11 +6,17 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const path = require('path');
+require('dotenv').config();
 
 
 const app = express();
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'https://patitas-sin-hogar.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'adopcion/build')));
@@ -19,16 +25,32 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
-
 const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '0381',
-  database: 'adopcion_patitas',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: true
+  }
 });
+
+const testDatabaseConnection = async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('✅ Conexión exitosa a AWS RDS');
+    connection.release();
+  } catch (error) {
+    console.error('❌ Error conectando a AWS RDS:', error);
+  }
+};
+
+// Verificar conexión al iniciar
+testDatabaseConnection();
 
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
