@@ -8,11 +8,12 @@ const MascotaDetalle = () => {
   const [mascota, setMascota] = useState(null);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchMascota = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/mascotas/${id}`);
+        const response = await axios.get(`${baseURL}/api/mascotas_disponibles/${id}`);
         setMascota(response.data);
       } catch (error) {
         setError('Error al cargar la información de la mascota. Por favor, intente nuevamente más tarde.');

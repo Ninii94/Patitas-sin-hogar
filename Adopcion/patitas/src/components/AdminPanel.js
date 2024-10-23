@@ -53,7 +53,7 @@ const AdminPanel = () => {
   const [changes, setChanges] = useState(false);
   const [codigosRefugio, setCodigosRefugio] = useState([]);
   const [filtroRefugio, setFiltroRefugio] = useState("");
-
+  const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
     fetchMascotas();
     fetchCodigosRefugio();
@@ -61,7 +61,7 @@ const AdminPanel = () => {
 
   const fetchMascotas = () => {
     axios
-      .get("http://localhost:5000/api/mascotas")
+    .get(`${baseURL}/api/mascotas`)
       .then((response) => {
         console.log("Datos completos recibidos en el cliente:", response.data);
         setMascotas(response.data);
@@ -71,7 +71,7 @@ const AdminPanel = () => {
 
   const fetchCodigosRefugio = () => {
     axios
-      .get("http://localhost:5000/api/refugios/codigos")
+     .get(`${baseURL}/api/refugios/codigos`)
       .then((response) => {
         setCodigosRefugio(response.data);
       })
@@ -104,8 +104,8 @@ const AdminPanel = () => {
     }
 
     const url = editingId
-      ? `http://localhost:5000/api/mascotas/${editingId}`
-      : "http://localhost:5000/api/mascotas";
+    ? `${baseURL}/api/mascotas_disponibles/${editingId}`
+    : `${baseURL}/api/mascotas_disponibles`;
 
     const method = editingId ? "put" : "post";
     const dataToSend = {
@@ -194,7 +194,7 @@ const AdminPanel = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:5000/api/mascotas/${id}`)
+      .delete(`${baseURL}/api/mascotas_disponibles/${id}`)
       .then(() => {
         fetchMascotas();
         setChanges(true);
