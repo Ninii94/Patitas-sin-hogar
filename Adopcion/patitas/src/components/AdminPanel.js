@@ -104,8 +104,8 @@ const AdminPanel = () => {
     }
 
     const url = editingId
-    ? `${baseURL}/api/mascotas_disponibles/${editingId}`
-    : `${baseURL}/api/mascotas_disponibles`;
+    ? `${baseURL}/api/mascotas/${editingId}`
+    : `${baseURL}/api/mascotas`;
 
     const method = editingId ? "put" : "post";
     const dataToSend = {
@@ -194,7 +194,7 @@ const AdminPanel = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`${baseURL}/api/mascotas_disponibles/${id}`)
+      .delete(`${baseURL}/api/mascotas/${id}`)
       .then(() => {
         fetchMascotas();
         setChanges(true);
