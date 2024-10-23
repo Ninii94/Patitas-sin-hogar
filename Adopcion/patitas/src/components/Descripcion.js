@@ -13,7 +13,7 @@ const MascotaDetalle = () => {
   useEffect(() => {
     const fetchMascota = async () => {
       try {
-        const response = await axios.get(`${baseURL}/api/mascotas_disponibles/${id}`);
+        const response = await axios.get(`${baseURL}/api/mascotas/${id}`);
         setMascota(response.data);
       } catch (error) {
         setError('Error al cargar la información de la mascota. Por favor, intente nuevamente más tarde.');
