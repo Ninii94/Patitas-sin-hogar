@@ -26,7 +26,7 @@ const Adoptar = () => {
     const fetchMascotas = async () => {
       try {
         const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-        const response = await axios.get(`${baseURL}/api/mascotas/recientes`);
+        const response = await axios.get(`${baseURL}/api/mascotas`);
         console.log('Datos recibidos:', response.data);
         setMascotas(response.data);
         setLoading(false);
