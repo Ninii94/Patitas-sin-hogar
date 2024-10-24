@@ -139,6 +139,11 @@ const AdminPanel = () => {
       });
       setImageUrl("");
       setEditingId(null);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+  
       fetchMascotas();
       setError(null);
       setChanges(true);
@@ -262,8 +267,8 @@ const AdminPanel = () => {
   );
 
   return (
-    <div className="container">
-      <button className="save-logout-button" onClick={handleSaveAndLogout}>
+    <div className="panel-container">
+      <button className="panel-save-logout-button" onClick={handleSaveAndLogout}>
         Guardar cambios y cerrar sesión
       </button>
 
@@ -278,18 +283,18 @@ const AdminPanel = () => {
         draggable
         pauseOnHover
       />
-      <div className="titulo-container">
-        <FaPaw className="patita" />
+      <div className="panel-titulo-container">
+        <FaPaw className="panel-patita" />
         <h2>Panel de Administracion</h2>
-        <FaPaw className="patita2" />
+        <FaPaw className="panel-patita2" />
       </div>
-      <div className="titulo2">
+      <div className="panel-titulo2">
         <h3>{editingId ? "Modificar" : "Añadir"} </h3>
       </div>
-      {error && <div className="error-message">{error}</div>}
-      <form className="form" onSubmit={handleSubmit}>
+      {error && <div className="panel-error-message">{error}</div>}
+      <form className="panel-form" onSubmit={handleSubmit}>
         <input
-          className="input"
+          className="panel-input"
           name="CodRefugio"
           value={formData.CodRefugio}
           onChange={handleInputChange}
@@ -297,7 +302,7 @@ const AdminPanel = () => {
           required
         />
         <input
-          className="input"
+          className="panel-input"
           name="Nombre"
           value={formData.Nombre}
           onChange={handleInputChange}
@@ -305,7 +310,7 @@ const AdminPanel = () => {
           required
         />
         <select
-          className="input"
+          className="panel-input"
           name="Especie"
           value={formData.Especie}
           onChange={handleInputChange}
@@ -316,7 +321,7 @@ const AdminPanel = () => {
           <option value="Felina">Felino</option>
         </select>
         <input
-          className="input"
+          className="panel-input"
           name="Edad"
           value={formData.Edad}
           onChange={handleInputChange}
@@ -324,7 +329,7 @@ const AdminPanel = () => {
           required
         />
         <select
-          className="input"
+          className="panel-input"
           name="Sexo"
           value={formData.Sexo}
           onChange={handleInputChange}
@@ -335,7 +340,7 @@ const AdminPanel = () => {
           <option value="Macho">Macho</option>
         </select>
         <textarea
-          className="textarea"
+          className="panel-textarea"
           name="Descripcion"
           value={formData.Descripcion}
           onChange={handleInputChange}
@@ -343,7 +348,7 @@ const AdminPanel = () => {
           required
         />
         <input
-          className="input"
+          className="panel-input"
           name="Telefono"
           value={formData.Telefono}
           onChange={handleInputChange}
@@ -357,14 +362,14 @@ const AdminPanel = () => {
             style={{ width: "100px", height: "100px", objectFit: "cover" }}
           />
         )}
-        <button className="submit-button" type="submit">
+        <button className="panel-submit-button" type="submit">
           {editingId ? "Actualizar" : "Añadir"} 
         </button>
       </form>
-      <div className="mascotas-list">
-        <div className="lista-header">
+      <div className="panel-mascotas-list">
+        <div className="panel-lista-header">
           <h3>Listado de animales</h3>
-          <div className="filtro-container">
+          <div className="panel-filtro-container">
             <label htmlFor="filtroRefugio">Filtrar por código: </label>
             <select
               id="filtroRefugio"
@@ -381,15 +386,15 @@ const AdminPanel = () => {
           </div>
         </div>
         {mascotasFiltradas.map((mascota) => (
-          <div className="mascota-item" key={mascota.id}>
+          <div className="panel-mascota-item" key={mascota.id}>
             {mascota.imagen_url && (
               <img
                 src={mascota.imagen_url}
                 alt={mascota.nombre}
-                className="mascota-thumbnail"
+                className="panel-mascota-thumbnail"
               />
             )}
-            <div className="mascota-info">
+            <div className="panel-mascota-info">
               <p>
                 <strong>Cod:</strong> {mascota.cod_refugio || "No disponible"}
               </p>
@@ -403,15 +408,15 @@ const AdminPanel = () => {
                 <strong>Sexo:</strong> {mascota.sexo || "No disponible"}
               </p>
             </div>
-            <div className="button-group">
+            <div className="panel-button-group">
               <button
-                className="edit-button"
+                className="panel-edit-button"
                 onClick={() => handleEdit(mascota)}
               >
                 Editar
               </button>
               <button
-                className="delete-button"
+                className="panel-delete-button"
                 onClick={() => handleDelete(mascota.id)}
               >
                 Eliminar
@@ -425,223 +430,3 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
-
-
-/*import React, { useState, useEffect } from 'react';
-import './panel.css';
-import { FaPaw } from 'react-icons/fa';
-import axios from 'axios';
-
-const cloudName = 'dukljwnwm';
-const uploadPreset = 'Mascotas';
-
-const ImageUploader = ({ onImageUpload }) => {
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
-
-    try {
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        formData
-      );
-      onImageUpload(response.data.secure_url);
-    } catch (error) {
-      console.error('Error al subir la imagen', error);
-    }
-  };
-
-  return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-    </div>
-  );
-};
-
-const AdminPanel = () => {
-  const [mascotas, setMascotas] = useState([]);
-  const [formData, setFormData] = useState({
-    Nombre: '',
-    Especie: '',
-    Edad: '',
-    Sexo: '',
-    Descripcion: '',
-    Telefono: '',
-    CodRefugio: '',
-    ImagenUrl: ''
-  });
-  const [editingId, setEditingId] = useState(null);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
-
-  useEffect(() => {
-    fetchMascotas();
-  }, []);
-
-  const fetchMascotas = () => {
-    axios.get('http://localhost:5000/api/mascotas')
-      .then(response => {
-        console.log('Datos completos recibidos en el cliente:', response.data);
-        setMascotas(response.data);
-      })
-      .catch(error => console.error('Error al obtener mascotas:', error));
-  };
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const validateEdad = (edad) => {
-    const edadRegex = /^(\d+)\s*(años?|meses?|días?)?$/i;
-    return edadRegex.test(edad);
-  };
-
-  const handleImageUpload = (url) => {
-    setImageUrl(url);
-    setFormData(prev => ({ ...prev, ImagenUrl: url }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateEdad(formData.Edad)) {
-      setError('Formato de edad inválido. Use por ejemplo "2 años" o "9 meses".');
-      return;
-    }
-  
-    const url = editingId 
-      ? `http://localhost:5000/api/mascotas/${editingId}`
-      : 'http://localhost:5000/api/mascotas';
-
-    const method = editingId ? 'put' : 'post';
-    const dataToSend = {
-      nombre: formData.Nombre,
-      especie: formData.Especie,
-      edad: formData.Edad,
-      sexo: formData.Sexo,
-      descripcion: formData.Descripcion,
-      numero_contacto: formData.Telefono,
-      cod_refugio: formData.CodRefugio,
-      imagen_url: formData.ImagenUrl || null 
-    };
-
-    try {
-      await axios({
-        method: method,
-        url: url,
-        data: dataToSend,  
-        headers: { 'Content-Type': 'application/json' }
-      });
-    
-      setFormData({
-        Nombre: '',
-        Especie: '',
-        Edad: '',
-        Sexo: '',
-        Descripcion: '',
-        Telefono: '',
-        CodRefugio: '',
-        ImagenUrl: ''
-      });
-      setImageUrl('');
-      setEditingId(null);
-      fetchMascotas();
-      setError(null);
-      setMessage(editingId ? "Mascota actualizada" : "Mascota agregada");
-    } catch (error) {
-      console.error('Error al guardar la mascota:', error);
-      setError(error.response?.data?.message || 'Ocurrió un error al guardar la mascota');
-    }
-  };
-
-  const handleEdit = (mascota) => {
-    setFormData({
-      Nombre: mascota.nombre,
-      Especie: mascota.especie,
-      Edad: mascota.edad,
-      Sexo: mascota.sexo,
-      Descripcion: mascota.descripcion,
-      Telefono: mascota.numero_contacto || '',
-      CodRefugio: mascota.cod_refugio,
-      ImagenUrl: mascota.imagen_url || ''
-    });
-    setImageUrl(mascota.imagen_url || '');
-    setEditingId(mascota.id);
-  };
-
-  const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/mascotas/${id}`)
-      .then(() => {
-        fetchMascotas();
-        setMessage("Mascota eliminada");
-      })
-      .catch(error => console.error('Error al eliminar la mascota:', error));
-  };
-
-  return (
-    <div className="container">
-      <div className="titulo-container">
-        <FaPaw className="patita" />
-        <h2>Administración de Mascotas</h2>
-        <FaPaw className="patita2" />
-      </div>
-      <div className='titulo2'> 
-        <h3>{editingId ? 'Modificar' : 'Añadir'} Mascota</h3>
-      </div>
-      {error && <div className="error-message">{error}</div>}
-      {message && <div className="success-message">{message}</div>}
-      <form className="form" onSubmit={handleSubmit}>
-        <input className="input" name="CodRefugio" value={formData.CodRefugio} onChange={handleInputChange} placeholder="Código de Refugio" required />
-        <input className="input" name="Nombre" value={formData.Nombre} onChange={handleInputChange} placeholder="Nombre" required />
-        <select className="input" name="Especie" value={formData.Especie} onChange={handleInputChange} required>
-          <option value="">Seleccione especie</option>
-          <option value="Canina">Canina</option>
-          <option value="Felina">Felina</option>
-        </select>
-        <input className="input" name="Edad" value={formData.Edad} onChange={handleInputChange} placeholder="Edad (ej. 2 años, 9 meses)" required />
-        <select className="input" name="Sexo" value={formData.Sexo} onChange={handleInputChange} required>
-          <option value="">Seleccione sexo</option>
-          <option value="Hembra">Hembra</option>
-          <option value="Macho">Macho</option>
-        </select>
-        <textarea className="textarea" name="Descripcion" value={formData.Descripcion} onChange={handleInputChange} placeholder="Descripción" required />
-        <input className="input" name="Telefono" value={formData.Telefono} onChange={handleInputChange} placeholder="Número de contacto" />
-        <ImageUploader onImageUpload={handleImageUpload} />
-        {imageUrl && (
-          <img src={imageUrl} alt="Preview" style={{width: '100px', height: '100px', objectFit: 'cover'}} />
-        )}
-        <button className="submit-button" type="submit">
-          {editingId ? 'Actualizar' : 'Añadir'} Mascota
-        </button>
-      </form>
-      <div className="mascotas-list">
-  <h3>Listado de mascotas</h3>
-  {mascotas.map((mascota) => (
-    <div className="mascota-item" key={mascota.id}>
-      {mascota.imagen_url && (
-        <img src={mascota.imagen_url} alt={mascota.nombre} className="mascota-thumbnail" />
-      )}
-      <div className="mascota-info">
-        <p><strong>Cod:</strong> {mascota.cod_refugio || 'No disponible'}</p>
-        <p><strong>Nombre:</strong> {mascota.nombre || 'No disponible'}</p>
-        <p><strong>Edad:</strong> {mascota.edad || 'No disponible'}</p>
-        <p><strong>Sexo:</strong> {mascota.sexo || 'No disponible'}</p>
-        
-      </div>
-      <div className="button-group">
-        <button className="edit-button" onClick={() => handleEdit(mascota)}>Editar</button>
-        <button className="delete-button" onClick={() => handleDelete(mascota.id)}>Eliminar</button>
-      </div>
-    </div>
-  ))}
-</div>
-</div>
-  );
-};
-
-
-
-export default AdminPanel; */

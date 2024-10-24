@@ -4,6 +4,7 @@
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.20.0",
+    "apicache": "^1.6.3",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",
@@ -24,10 +25,10 @@
     "concurrently": "^9.0.1"
   },
   "scripts": {
-  "start": "node server.js",
-  "build": "react-scripts build",
-  "dev": "concurrently \"nodemon server.js\" \"react-scripts start\""
-},
+    "start": "node server.js",
+    "build": "react-scripts build",
+    "dev": "concurrently \"nodemon server.js\" \"react-scripts start\""
+  },
   "browserslist": {
     "production": [
       ">0.2%",

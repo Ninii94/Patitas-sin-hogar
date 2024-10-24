@@ -8,7 +8,8 @@ const upload = multer({ dest: 'uploads/' });
 const path = require('path');
 require('dotenv').config();
 
-
+const apicache = require('apicache');
+const cache = apicache.middleware;
 const app = express();
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'https://patitas-sin-hogar.onrender.com',
@@ -234,3 +235,5 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+app.get('/ping', (req, res) => res.send('pong'));
+app.use(cache('2 minutes'));
